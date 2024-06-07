@@ -1,0 +1,49 @@
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+
+  namespace: {{ template "webhook-inject-sidecar.namespace" . }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded   
+  name: {{ template "webhook-inject-sidecar.fullname" . }}-admission-patch
+  labels:
+    app: {{ template "webhook-inject-sidecar.name" $ }}-admission-patch
+{{ include "webhook-inject-sidecar.labels" $ | indent 4 }}
+spec:
+  template:
+    metadata:
+      name:  {{ template "webhook-inject-sidecar.fullname" . }}-admission-patch
+      labels:
+        app: {{ template "webhook-inject-sidecar.name" $ }}-admission-patch
+{{ include "webhook-inject-sidecar.labels" $ | indent 8 }}
+    spec:
+      containers:
+        - name: patch
+          image: {{ .Values.imageCert }}
+          imagePullPolicy: IfNotPresent
+          args:
+            - patch
+            - --webhook-name={{ template "webhook-inject-sidecar.fullname" . }}-admission
+            - --namespace={{- template "webhook-inject-sidecar.namespace" . }}
+            - --secret-name={{ template "webhook-inject-sidecar.fullname" . }}-admission
+            - --patch-failure-policy=
+          securityContext:
+          
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+          resources:
+            {}
+      restartPolicy: OnFailure
+      serviceAccountName: {{ template "webhook-inject-sidecar.fullname" . }}-admission
+      securityContext:
+        runAsGroup: 2000
+        runAsNonRoot: true
+        runAsUser: 2000
+        seccompProfile:
+          type: RuntimeDefault

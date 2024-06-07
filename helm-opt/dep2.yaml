@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: dep2
+    required-label: "true" # validate会用判断这个label
+  name: dep2
+  namespace: ns12
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dep2
+      required-label: "true"
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: dep2
+        required-label: "true"
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        resources: {}
+status: {}

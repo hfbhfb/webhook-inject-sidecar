@@ -1,0 +1,18 @@
+{{- if .Values.debuginfo }}
+{{- else}}
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ template "webhook-inject-sidecar.namespace" . }}
+  name: {{ template "webhook-inject-sidecar.fullname" . }}-operator
+spec:
+  type: ClusterIP
+  ports:
+  # Port上的映射端口
+  - port: 443
+    targetPort: 443
+    name: https
+    protocol: TCP           # 访问Service的协议，支持TCP和UDP
+  selector:
+    app: {{ template "webhook-inject-sidecar.name" $ }}-workload
+{{- end }}

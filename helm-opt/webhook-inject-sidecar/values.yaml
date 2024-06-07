@@ -1,0 +1,10 @@
+
+replicaCount: 1
+
+image: swr.cn-north-4.myhuaweicloud.com/hfbbg4/webhookmini:v1
+
+imageCert: docker.io/sdedu/kube-webhook-certgen:v20230407
+
+# debuginfo:
+#   img: docker.io/hefabao/tools-k8s:v0.52 #nginx:1.25-bullseye-perl #原来是 nginx:1.14.2
+#   pc: 192.168.113.12:443

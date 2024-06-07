@@ -1,0 +1,22 @@
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+
+  namespace: {{ template "webhook-inject-sidecar.namespace" . }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  name: {{ template "webhook-inject-sidecar.fullname" . }}-admission
+  labels:
+    app: {{ template "webhook-inject-sidecar.name" $ }}-admission
+{{ include "webhook-inject-sidecar.labels" $ | indent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "webhook-inject-sidecar.fullname" . }}-admission
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "webhook-inject-sidecar.fullname" . }}-admission
+    namespace: {{ template "webhook-inject-sidecar.namespace" . }}

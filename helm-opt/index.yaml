@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  webhook-inject-sidecar:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-10-31T14:43:23.427431+08:00"
+    description: A Helm chart for Kubernetes
+    digest: bf98e88ed3f1ed41482fc388bcaed786b94ccfdee2681071f9311c2ed1c6543a
+    name: webhook-inject-sidecar
+    type: application
+    urls:
+    - webhook-inject-sidecar-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-10-31T14:43:23.42644+08:00"
